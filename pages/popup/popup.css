@@ -1,0 +1,381 @@
+/**
+ * popup 页面样式
+ * 两种形态：
+ * - 弹窗：单列（sidebar 占满，320px 宽）
+ * - 标签页：左右分栏（左 sidebar 固定宽度，右 main 报告区）
+ */
+
+body {
+  width: 320px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 0;
+  margin: 0;
+  color: #222;
+}
+
+/* 标签页：左右分栏 */
+@media (min-width: 480px) {
+  body {
+    width: auto;
+  }
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  .sidebar {
+    width: 340px;
+    flex: 0 0 340px;
+    border-right: 1px solid #e5e5e5;
+    box-sizing: border-box;
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+  .main {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+}
+
+.sidebar {
+  padding: 12px 16px;
+  box-sizing: border-box;
+}
+
+/* ===== 顶部工具栏 ===== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.open-tab {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  line-height: 26px;
+  font-size: 14px;
+  background: #f0f0f0;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.open-tab:hover {
+  background: #e6e6e6;
+}
+
+/* ===== AI 设置折叠面板 ===== */
+details {
+  margin-bottom: 10px;
+}
+
+summary {
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+  margin-bottom: 6px;
+}
+
+/* ===== 表单 ===== */
+label {
+  display: block;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+input,
+select {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 8px;
+  font-size: 13px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 8px;
+  font-size: 13px;
+  background: #ff4500;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+button.secondary:hover {
+  background: #e6e6e6;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ===== 状态栏 ===== */
+#status {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #444;
+  white-space: pre-line;
+  min-height: 16px;
+}
+
+/* ===== 报告区 ===== */
+.main {
+  padding: 16px 20px;
+  box-sizing: border-box;
+}
+
+.report-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.report-actions button {
+  width: auto;
+  flex: 1;
+  min-width: 110px;
+}
+
+/* 报告头 */
+.report-header {
+  margin-bottom: 20px;
+}
+
+.report-header h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.report-target {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.report-stats {
+  display: flex;
+  gap: 20px;
+}
+
+.report-stats .stat {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+}
+
+.report-stats .stat em {
+  font-style: normal;
+  font-size: 12px;
+  color: #888;
+  font-weight: 400;
+}
+
+/* 模块 */
+.module {
+  margin-bottom: 28px;
+}
+
+.module h3 {
+  font-size: 15px;
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #ff4500;
+  display: inline-block;
+}
+
+.empty {
+  color: #999;
+  font-size: 13px;
+}
+
+/* ===== 条形图 ===== */
+.bar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bar-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.bar-icon {
+  font-size: 13px;
+}
+
+.bar-label {
+  flex: 1;
+  font-size: 13px;
+  color: #222;
+}
+
+.bar-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.bar-track {
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: #ff4500;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+/* ===== 证据引用 ===== */
+.evidence {
+  margin-top: 6px;
+  padding-left: 4px;
+}
+
+.ev-item {
+  font-size: 12px;
+  color: #888;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.ev-quote {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ev-link {
+  color: #ff4500;
+  text-decoration: none;
+  font-size: 11px;
+  flex: 0 0 auto;
+}
+
+.ev-link:hover {
+  text-decoration: underline;
+}
+
+/* ===== 04 解决方案 ===== */
+.solution-list,
+.need-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.solution-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.solution-name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.solution-arrow,
+.need-arrow {
+  color: #999;
+}
+
+.solution-drawback {
+  color: #b00;
+  font-size: 13px;
+}
+
+.solution-voice {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* ===== 05 未满足需求 ===== */
+.need-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.need-pain {
+  font-size: 13px;
+  color: #b00;
+}
+
+.need-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+}
+
+/* ===== 06 产品机会（列表） ===== */
+.opp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.opp-item {
+  border-left: 3px solid #ff4500;
+  padding-left: 12px;
+}
+
+.opp-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.opp-dot {
+  font-size: 14px;
+}
+
+.opp-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.opp-tags {
+  font-size: 12px;
+  color: #888;
+}
