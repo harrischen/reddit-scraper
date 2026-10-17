@@ -3,7 +3,7 @@
   "name": "Reddit VOC 数据抓取器",
   "version": "0.1.0",
   "description": "最轻量的 Reddit 抓取插件：在指定子版抓取 new/hot/rising 或关键词搜索结果，AI 分析输出 VOC 报告。",
-  "permissions": ["downloads", "storage"],
+  "permissions": ["downloads", "storage", "unlimitedStorage", "declarativeNetRequest"],
   "host_permissions": ["https://www.reddit.com/*", "https://*/*"],
   "action": {
     "default_popup": "pages/popup/popup.html"

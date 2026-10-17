@@ -57,6 +57,21 @@ export interface ApiSettings {
   model: string;
 }
 
+/** 预设 AI 服务商：baseUrl 与可用 model 关联，供 AI 设置下拉选择 */
+export interface ProviderPreset {
+  name: string;
+  baseUrl: string;
+  models: string[];
+}
+
+export const PROVIDER_PRESETS: ProviderPreset[] = [
+  { name: "DeepSeek", baseUrl: "https://api.deepseek.com", models: ["deepseek-chat", "deepseek-reasoner"] },
+  { name: "OpenAI", baseUrl: "https://api.openai.com/v1", models: ["gpt-4o-mini", "gpt-4o", "gpt-4.1"] },
+  { name: "Moonshot", baseUrl: "https://api.moonshot.cn/v1", models: ["moonshot-v1-8k", "moonshot-v1-32k", "moonshot-v1-128k"] },
+  { name: "通义千问", baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1", models: ["qwen-turbo", "qwen-plus", "qwen-max"] },
+  { name: "智谱 GLM", baseUrl: "https://open.bigmodel.cn/api/paas/v4", models: ["glm-4-flash", "glm-4"] },
+];
+
 /** 一次完整抓取任务配置 */
 export interface TaskConfig extends FetchParams {
   limit: number;

@@ -1,6 +1,7 @@
 /**
- * 右侧报告区（仅标签页显示）：
- * 顶部操作栏（复制 Markdown / 下载 CSV / 下载报告）+ 看板
+ * 步骤3：报告区（仅标签页显示）
+ * 顶部操作栏（复制 Markdown / 下载报告 .md）+ 决策看板
+ * 原始 CSV 下载已移到「数据预览」阶段（DataPreviewPanel）
  */
 
 import { useState } from "react";
@@ -12,32 +13,25 @@ import type { AnalysisState } from "@/src/hooks/useAnalysisRunner";
 import type { TaskConfig } from "@/src/types";
 
 interface Props {
-  state: AnalysisState;
+  state: Extract<AnalysisState, { stage: "done" }>;
   task: TaskConfig;
 }
 
 export default function ReportPanel({ state, task }: Props) {
   const [toast, setToast] = useState("");
-
-  const report = state.phase === "done" ? state.report : null;
-  const posts = state.phase === "done" ? state.posts : null;
-  const markdown = state.phase === "done" ? state.markdown : "";
+  const { report, markdown, posts } = state;
 
   const notify = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(""), 2500);
   };
 
-  const prefix = () => filePrefix(task);
-
   return (
-    <div className="main">
+    <>
       <div className="report-actions">
         <button
           className="secondary"
-          disabled={!markdown}
           onClick={async () => {
-            if (!markdown) return;
             await copyText(markdown);
             notify("已复制 Markdown 到剪贴板");
           }}
@@ -46,11 +40,10 @@ export default function ReportPanel({ state, task }: Props) {
         </button>
         <button
           className="secondary"
-          disabled={!posts || posts.length === 0}
+          disabled={posts.length === 0}
           onClick={() => {
-            if (!posts) return;
-            downloadFile(`${prefix()}_posts.csv`, toPostsCsv(posts), "text/csv");
-            downloadFile(`${prefix()}_comments.csv`, toCommentsCsv(posts), "text/csv");
+            downloadFile(`${filePrefix(task)}_posts.csv`, toPostsCsv(posts), "text/csv");
+            downloadFile(`${filePrefix(task)}_comments.csv`, toCommentsCsv(posts), "text/csv");
             notify("已下载原始 CSV（posts + comments）");
           }}
         >
@@ -58,10 +51,8 @@ export default function ReportPanel({ state, task }: Props) {
         </button>
         <button
           className="secondary"
-          disabled={!markdown}
           onClick={() => {
-            if (!markdown) return;
-            downloadFile(`${prefix()}_voc_report.md`, markdown, "text/markdown");
+            downloadFile(`${filePrefix(task)}_voc_report.md`, markdown, "text/markdown");
             notify("已下载 VOC 报告 .md");
           }}
         >
@@ -70,17 +61,7 @@ export default function ReportPanel({ state, task }: Props) {
         {toast && <span className="rv-toast">{toast}</span>}
       </div>
 
-      {report ? (
-        <Dashboard report={report} />
-      ) : (
-        <div className="rv-placeholder">
-          {state.phase === "running"
-            ? state.progress
-            : state.phase === "error"
-              ? state.message
-              : "填好左侧配置后点「开始分析」，报告会显示在这里"}
-        </div>
-      )}
-    </div>
+      <Dashboard report={report} />
+    </>
   );
 }

@@ -24,16 +24,17 @@ export function CompetitionPanel({ signals }: { signals: Signal[] }) {
           const pct = s.satisfaction * 10;
           return (
             <div className="rv-bar-row" key={s.id}>
-              <div className="rv-bar-label">{s.name}</div>
-              <div className="rv-bar-track">
-                <div
-                  className="rv-bar-fill"
-                  style={{ width: `${pct}%`, background: satisfactionColor(s.satisfaction) }}
-                />
+              <div className="rv-bar-main">
+                <div className="rv-bar-track">
+                  <div
+                    className="rv-bar-fill"
+                    style={{ width: `${pct}%`, background: satisfactionColor(s.satisfaction) }}
+                  />
+                </div>
+                <div className="rv-bar-score">{s.satisfaction}</div>
+                <div className="rv-bar-meta">/10 · {s.competition}竞争</div>
               </div>
-              <span className="rv-bar-meta">
-                {s.satisfaction}/10 · {s.competition}竞争
-              </span>
+              <div className="rv-bar-label">{s.name}</div>
             </div>
           );
         })}

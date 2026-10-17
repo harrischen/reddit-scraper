@@ -1,16 +1,10 @@
 /**
- * 顶部 header：标题 + 副标题 + chips（品类/市场/数据源）+ 主题切换
+ * 顶部 header：标题 + 副标题 + chips（品类/市场/数据源）
  */
 
 import type { VocReport } from "@/src/types";
 
-interface Props {
-  report: VocReport;
-  theme: "dark" | "light";
-  onToggleTheme: () => void;
-}
-
-export function DashboardHeader({ report, theme, onToggleTheme }: Props) {
+export function DashboardHeader({ report }: { report: VocReport }) {
   return (
     <header className="rv-header">
       <div>
@@ -22,9 +16,6 @@ export function DashboardHeader({ report, theme, onToggleTheme }: Props) {
           <span className="rv-chip">数据源：{report.platform}</span>
         </div>
       </div>
-      <button className="rv-theme-btn" onClick={onToggleTheme}>
-        {theme === "dark" ? "切换浅色" : "切换深色"}
-      </button>
     </header>
   );
 }
