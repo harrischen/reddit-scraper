@@ -34,10 +34,23 @@ import type {
 const SELF_TEXT_LIMIT = 800; // 正文截断长度
 const COMMENT_BODY_LIMIT = 300; // 单条评论截断长度
 const EVIDENCE_QUOTE_LIMIT = 300; // 证据原话展示截断长度
-const MAX_BATCH_TOKENS = 30000; // 每批 token 上限
+// 每批 token 上限。主流模型普遍支持 ≥1M 上下文，取 10 万可明显减少批次数；
+// 仍分批是为了控制单次「抽取输出」的规模（输出 JSON 过长易截断、召回下降）。
+const MAX_BATCH_TOKENS = 100000;
 const OPPORTUNITY_THRESHOLD = 12; // 高机会需求阈值
 
-type ProgressFn = (message: string) => void;
+/** 分析进度（结构化，供 UI 展示阶段与批次进度条） */
+export interface AnalysisProgress {
+  phase: "extract" | "aggregate";
+  /** 当前批（1 起），aggregate 阶段为 0 */
+  batch: number;
+  /** 总批数，aggregate 阶段为 0 */
+  batches: number;
+  /** 当前步骤内的短说明，如「本批 7 篇」「共 23 条原子条目」 */
+  detail: string;
+}
+
+type ProgressFn = (p: AnalysisProgress) => void;
 
 /** 阶段一抽取的原子条目（need / workaround 两种） */
 type ExtractionItem = ExtractionResponse["items"][number];
@@ -336,7 +349,12 @@ export async function runAnalysis(
   const batches = chunkByTokens(posts, MAX_BATCH_TOKENS);
   const allItems: ExtractionItem[] = [];
   for (let i = 0; i < batches.length; i++) {
-    onProgress(`正在抽取 ${i + 1}/${batches.length} 批…（本批 ${batches[i].length} 篇）`);
+    onProgress({
+      phase: "extract",
+      batch: i + 1,
+      batches: batches.length,
+      detail: `本批 ${batches[i].length} 篇`,
+    });
     const items = await extractBatch(settings, batches[i]);
     allItems.push(...items);
   }
@@ -345,8 +363,13 @@ export async function runAnalysis(
     throw new Error("第一阶段没有抽取到任何条目，请检查数据或更换模型");
   }
 
-  // 阶段二：聚类 + 打分（按 strict json_schema 输出）
-  onProgress(`正在聚合成需求信号并打分…（共 ${allItems.length} 条原子条目）`);
+  // 阶段二：聚类 + 打分（跨批次聚合，这一步才形成「全面」的需求信号）
+  onProgress({
+    phase: "aggregate",
+    batch: 0,
+    batches: 0,
+    detail: `共 ${allItems.length} 条原子条目`,
+  });
   const agg = await aggregate(settings, allItems);
 
   const category = reportMeta.subreddit || reportMeta.keyword || "未指定";

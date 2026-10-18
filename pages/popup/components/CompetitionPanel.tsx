@@ -16,10 +16,8 @@ export function CompetitionPanel({ signals }: { signals: Signal[] }) {
   return (
     <div className="rv-panel">
       <div className="rv-card">
-        <h2 className="rv-section-title">现有方案满意度对比（概览）</h2>
-        <p className="rv-para muted">
-          满意度越低 = 现有方案越"凑合" = 切入机会越大，明细见「现有解决办法」
-        </p>
+        <h2 className="rv-section-title">现有方案满意度对比</h2>
+        <p className="rv-para muted">满意度越低 = 现有方案越"凑合" = 切入机会越大</p>
         {sorted.map((s) => {
           const pct = s.satisfaction * 10;
           return (
@@ -35,6 +33,12 @@ export function CompetitionPanel({ signals }: { signals: Signal[] }) {
                 <div className="rv-bar-meta">/10 · {s.competition}竞争</div>
               </div>
               <div className="rv-bar-label">{s.name}</div>
+              {(s.current || s.flaw) && (
+                <div className="rv-bar-detail">
+                  现有办法：{s.current || "—"}
+                  {s.flaw && <span className="rv-bar-flaw">缺陷：{s.flaw}</span>}
+                </div>
+              )}
             </div>
           );
         })}

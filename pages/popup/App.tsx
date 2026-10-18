@@ -149,7 +149,13 @@ export default function App() {
             </div>
           )}
           {(state.stage === "fetching" || state.stage === "analyzing") && (
-            <ProgressPanel progress={status} analyzing={state.stage === "analyzing"} />
+            <ProgressPanel
+              progress={status}
+              analyzing={state.stage === "analyzing"}
+              phase={state.stage === "analyzing" ? state.phase : undefined}
+              batch={state.stage === "analyzing" ? state.batch : 0}
+              batches={state.stage === "analyzing" ? state.batches : 0}
+            />
           )}
           {state.stage === "fetched" && (
             <DataPreviewPanel posts={state.posts} task={task} />

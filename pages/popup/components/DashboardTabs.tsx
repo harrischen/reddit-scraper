@@ -1,5 +1,5 @@
 /**
- * 看板 tab 导航：总览 / 需求信号 / 现有解决办法 / 竞争格局 / 选品短名单
+ * 看板 tab 导航：总览 / 需求信号 / 竞争格局 / 选品短名单
  */
 
 export type TabKey = "overview" | "signals" | "competition" | "shortlist";

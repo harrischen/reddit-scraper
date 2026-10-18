@@ -35,7 +35,7 @@ export type AnalysisState =
   | { stage: "config" }
   | { stage: "fetching"; progress: string }
   | { stage: "fetched"; posts: RedditPostRow[] }
-  | { stage: "analyzing"; progress: string; posts: RedditPostRow[] }
+  | { stage: "analyzing"; progress: string; phase: "extract" | "aggregate"; batch: number; batches: number; posts: RedditPostRow[] }
   | { stage: "done"; report: VocReport; markdown: string; posts: RedditPostRow[] }
   | { stage: "error"; message: string; from: "fetch" | "analyze" };
 
@@ -90,13 +90,28 @@ export function useAnalysisRunner() {
       return;
     }
 
-    setState({ stage: "analyzing", progress: "正在准备分析…", posts });
+    setState({
+      stage: "analyzing",
+      progress: "正在准备分析…",
+      phase: "extract",
+      batch: 0,
+      batches: 0,
+      posts,
+    });
     try {
       const report = await runAnalysis(
         posts,
         api,
         { subreddit: task.subreddit, keyword: task.keyword },
-        (message) => setState({ stage: "analyzing", progress: message, posts })
+        (p) =>
+          setState({
+            stage: "analyzing",
+            progress: p.detail,
+            phase: p.phase,
+            batch: p.batch,
+            batches: p.batches,
+            posts,
+          })
       );
       await saveReport(report);
       setState({ stage: "done", report, markdown: toMarkdown(report), posts });
